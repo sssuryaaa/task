@@ -21,5 +21,5 @@ npm install
 ### 4. Run the Project
 
 ```bash
-npm run dev
+npm run build
 ```

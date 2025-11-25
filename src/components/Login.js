@@ -87,7 +87,7 @@ const Login = () => {
     setErrorMessage(null);
   };
   return (
-    <div className="w-96 m-auto mt-36 p-6 shadow-lg">
+    <div className="sm:w-96 w-full m-auto sm:mt-36 mt-0 p-6 shadow-lg">
       <form onSubmit={(e) => e.preventDefault()}>
         <h1 className="font-bold text-3xl my-3.5">
           {signUp ? "Sign Up" : "Sign In"}
@@ -95,20 +95,20 @@ const Login = () => {
         {signUp && (
           <input
             ref={name}
-            className="border p-2.5 mb-3 w-80 rounded-sm"
+            className="border p-2.5 mb-3 w-80 rounded-sm  border-gray-300 focus:ring focus:ring-blue-300 outline-none"
             type="text"
             placeholder="Full Name"
           ></input>
         )}
         <input
           ref={email}
-          className="border p-2.5 mb-3 w-80 rounded-sm"
+          className="border p-2.5 mb-3 w-80 rounded-sm  border-gray-300 focus:ring focus:ring-blue-300 outline-none"
           type="email"
           placeholder="Email"
         ></input>
         <input
           ref={password}
-          className="border p-2.5 mb-3 w-80 rounded-sm"
+          className="border p-2.5 mb-3 w-80 rounded-sm  border-gray-300 focus:ring focus:ring-blue-300 outline-none"
           type="password"
           placeholder="Password"
         ></input>

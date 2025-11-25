@@ -77,11 +77,11 @@ const Todo = () => {
 
   return (
     <div className="max-w-md mt-11 mx-auto bg-white shadow-lg rounded-xl p-6">
-      <div className="flex justify-between items-center mb-3">
+      <div className="text-center sm:justify-between sm:items-center mb-3 sm:flex">
         <h1 className="text-2xl font-bold">Add Tasks</h1>
         <input
           type="text"
-          className="border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-300 outline-none"
+          className="sm:w-[198.4px] w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-300 outline-none"
           placeholder="Search..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
