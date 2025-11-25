@@ -1,13 +1,18 @@
-import React from "react";
-
-const TodoItem = ({ todo, onDelete }) => {
+const TodoItem = ({ todo, onDelete, onToggle }) => {
   return (
-    <div className="flex justify-between items-center border p-3 rounded-lg shadow-sm bg-gray-50">
-      <span className="text-gray-800">{todo.text}</span>
-
+    <div className="flex justify-between items-center p-2 border rounded-lg">
+      <span
+        onClick={() => onToggle(todo._id, todo.completed)}
+        style={{
+          textDecoration: todo.completed ? "line-through" : "none",
+          cursor: "pointer",
+        }}
+      >
+        {todo.task}
+      </span>
       <button
-        onClick={() => onDelete(todo.id)}
-        className="text-red-600 hover:text-red-800 font-semibold"
+        onClick={() => onDelete(todo._id)}
+        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
       >
         Delete
       </button>

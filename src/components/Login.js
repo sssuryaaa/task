@@ -84,6 +84,7 @@ const Login = () => {
 
   const handleClick = () => {
     setSignUp(!signUp);
+    setErrorMessage(null);
   };
   return (
     <div className="w-96 m-auto mt-36 p-6 shadow-lg">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TodoItem from "./TodoItem";
 
 const Todo = () => {
@@ -6,25 +6,79 @@ const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  const handleAdd = () => {
-    if (task.trim() === "") return;
+  const token = localStorage.getItem("token");
 
-    setTodos([...todos, { id: Date.now(), text: task }]);
-    setTask("");
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/todos", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setTodos(data);
+      } catch (err) {
+        console.error("Error fetching todos:", err);
+      }
+    };
+    fetchTodos();
+  }, [token]);
+
+  const handleAdd = async () => {
+    if (!task.trim()) return;
+    try {
+      const res = await fetch("http://localhost:5000/api/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ task }),
+      });
+      const data = await res.json();
+      setTodos([data, ...todos]);
+      setTask("");
+    } catch (err) {
+      console.error("Error adding todo:", err);
+    }
   };
 
-  const handleDelete = (id) => {
-    setTodos(todos.filter((t) => t.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`http://localhost:5000/api/todos/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTodos(todos.filter((t) => t._id !== id));
+    } catch (err) {
+      console.error("Error deleting todo:", err);
+    }
+  };
+
+  const handleToggle = async (id, completed) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/todos/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ completed: !completed }),
+      });
+      const data = await res.json();
+      setTodos(todos.map((t) => (t._id === id ? data : t)));
+    } catch (err) {
+      console.error("Error toggling todo:", err);
+    }
   };
 
   const filteredTodos = todos.filter((t) =>
-    t.text.toLowerCase().includes(searchText.toLowerCase())
+    t.task.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
     <div className="max-w-md mt-11 mx-auto bg-white shadow-lg rounded-xl p-6">
       <div className="flex justify-between items-center mb-3">
-        <h1 className="text-2xl font-bold ">Add Tasks</h1>
+        <h1 className="text-2xl font-bold">Add Tasks</h1>
         <input
           type="text"
           className="border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-300 outline-none"
@@ -53,7 +107,12 @@ const Todo = () => {
 
       <div className="mt-4 space-y-3">
         {filteredTodos.map((t) => (
-          <TodoItem key={t.id} todo={t} onDelete={handleDelete} />
+          <TodoItem
+            key={t._id}
+            todo={t}
+            onDelete={handleDelete}
+            onToggle={handleToggle}
+          />
         ))}
       </div>
     </div>
